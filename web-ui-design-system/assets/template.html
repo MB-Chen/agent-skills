@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>页面标题</title>
+<style>
+/* ============ Design Tokens ============ */
+:root{
+  --primary:#4B74F0;
+  --primary-hover:#3a5cd0;
+  --primary-soft:#E8F0FE;
+  --bg-page:#F4F8FF;
+  --bg-card:#FFFFFF;
+  --bg-table-head:#fafbfc;
+  --bg-row-stripe:#fbfbfc;
+  --border-soft:#ebeef5;
+  --border-base:#e5e7eb;
+  --text-base:#333333;
+  --text-secondary:#4b5563;
+  --text-tertiary:#8b94a3;
+  --success:#26BD71;
+  --warning:#FFB21A;
+  --error:#F24957;
+  --top-h:56px;
+  --side-w:240px;
+  --hover-row:#f3f6ff;
+  --divider-thin:#f3f4f6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{min-width:1280px}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:13px;line-height:20px;color:var(--text-base);background:var(--bg-page)}
+a{color:var(--primary);text-decoration:none}
+ul{list-style:none}
+
+/* ============ Top Bar ============ */
+.header{position:fixed;top:0;left:0;right:0;height:var(--top-h);z-index:100;background:var(--primary);display:flex;align-items:center;padding:0 20px;color:#fff;box-shadow:0 2px 8px rgba(75,116,240,.25)}
+.logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:#fff;flex-shrink:0;margin-right:24px}
+.logo-icon{width:32px;height:32px;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:16px;font-weight:600}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.manual-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);border-radius:4px;color:#fff;font-size:12px;cursor:pointer}
+.manual-btn:hover{background:rgba(255,255,255,.22)}
+.icon-btn{position:relative;width:32px;height:32px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--error);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid var(--primary)}
+.user-info{display:flex;align-items:center;gap:8px;padding:0 8px;cursor:pointer;height:40px;border-radius:4px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:16px}
+.user-meta{display:flex;flex-direction:column;line-height:16px}
+.user-name{font-size:13px;font-weight:500;color:#fff}
+.user-role{font-size:11px;color:rgba(255,255,255,.75)}
+
+/* ============ Sidebar ============ */
+.sidebar{position:fixed;top:var(--top-h);left:0;bottom:0;width:var(--side-w);z-index:90;background:#fff;border-right:1px solid var(--border-soft);padding:8px 0;overflow-y:auto}
+.menu-item{display:flex;align-items:center;gap:10px;padding:0 20px;height:44px;cursor:pointer;color:var(--text-secondary);font-size:13px;border-left:3px solid transparent;transition:all .15s}
+.menu-item:hover{background:var(--primary-soft);color:var(--primary)}
+.menu-item.active{background:var(--primary-soft);color:var(--primary);border-left-color:var(--primary);font-weight:500}
+.menu-item .mi{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.menu-item .arrow{margin-left:auto;font-size:10px;color:var(--text-tertiary);transition:transform .2s}
+.menu-item.expanded .arrow{transform:rotate(90deg)}
+.submenu{overflow:hidden}
+.submenu .menu-item{height:40px;padding-left:48px;font-size:12px}
+
+/* ============ Tab Bar ============ */
+.tab-bar{position:fixed;top:var(--top-h);left:var(--side-w);right:0;height:36px;background:#f5f7fa;border-bottom:1px solid var(--border-soft);display:flex;align-items:flex-end;padding:0 12px;z-index:85;overflow-x:auto}
+.tab-item{height:32px;padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);background:#e8ecf3;border:1px solid var(--border-soft);border-bottom:none;border-radius:4px 4px 0 0;margin-right:4px;cursor:pointer;white-space:nowrap}
+.tab-item.active{background:#fff;color:var(--primary);border-top:2px solid var(--primary);font-weight:500}
+.tab-close{width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;color:var(--text-tertiary)}
+.tab-close:hover{background:var(--error);color:#fff}
+
+/* ============ Main ============ */
+.main{margin-left:var(--side-w);margin-top:calc(var(--top-h) + 36px);padding:16px}
+.page-title{font-size:18px;font-weight:600;line-height:28px;margin-bottom:12px;color:var(--text-base)}
+.page-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.page-toolbar .left{font-size:18px;font-weight:600}
+.page-toolbar .right{display:flex;gap:8px}
+
+/* ============ Card ============ */
+.card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:6px;padding:16px}
+.card-title{font-size:15px;font-weight:600;line-height:24px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+
+/* ============ Filter ============ */
+.filter-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:6px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filter-item{display:flex;align-items:center;gap:6px}
+.filter-item label{font-size:12px;color:var(--text-tertiary);white-space:nowrap}
+.filter-actions{margin-left:auto;display:flex;gap:8px}
+
+/* ============ Buttons ============ */
+.btn{height:28px;padding:0 14px;border-radius:3px;font-size:13px;cursor:pointer;border:1px solid transparent;transition:all .15s;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.btn:hover{opacity:.85}
+.btn-sm{height:26px;padding:0 10px;font-size:12px}
+.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-success{background:var(--success);color:#fff;border-color:var(--success)}
+.btn-success:hover{background:#1ea85f;border-color:#1ea85f}
+.btn-secondary{background:#fff;color:var(--primary);border-color:var(--primary)}
+.btn-plain{background:#fff;color:var(--text-secondary);border-color:var(--border-base)}
+.btn-danger{background:var(--error);color:#fff;border-color:var(--error)}
+.btn-danger-secondary{background:#fff;color:var(--error);border-color:var(--error)}
+.btn-danger-secondary:hover{background:rgba(242,73,87,.06)}
+.btn-link{background:transparent;color:var(--primary);border:none;padding:0 4px;font-size:13px;cursor:pointer}
+
+/* ============ Table ============ */
+.table-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.table-toolbar .left{font-size:12px;color:var(--text-tertiary)}
+.table-toolbar .left b{color:var(--text-base);font-weight:600}
+.dt{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border-soft);border-radius:4px;overflow:hidden}
+.dt th{background:var(--bg-table-head);color:var(--text-base);font-weight:500;font-size:12.5px;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border-soft);white-space:nowrap}
+.dt th.center{text-align:center}
+.dt td{padding:6px 10px;font-size:12.5px;border-bottom:1px solid var(--divider-thin)}
+.dt td.center{text-align:center}
+.dt tbody tr:nth-child(even){background:var(--bg-row-stripe)}
+.dt tbody tr:hover{background:var(--hover-row)}
+.dt td.empty{text-align:center;color:var(--text-tertiary);padding:24px}
+
+/* ============ Pager ============ */
+.pager{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:8px 0;font-size:12px;color:var(--text-tertiary)}
+.pager .page-size select{height:26px;border:1px solid var(--border-base);border-radius:3px;font-size:12px;padding:0 4px}
+.pager .pages{display:flex;gap:2px}
+.pager .page{min-width:26px;height:26px;border:1px solid var(--border-base);background:#fff;border-radius:3px;cursor:pointer;font-size:12px;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;padding:0 4px}
+.pager .page.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* ============ Tags ============ */
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:3px;font-size:12px;font-weight:500;line-height:18px}
+.tag-success{background:rgba(38,189,113,.1);color:var(--success)}
+.tag-warning{background:rgba(255,178,26,.1);color:var(--warning)}
+.tag-error{background:rgba(242,73,87,.1);color:var(--error)}
+.tag-info{background:rgba(75,116,240,.1);color:var(--primary)}
+.tag-default{background:rgba(139,148,163,.1);color:var(--text-tertiary)}
+
+/* ============ Form Controls ============ */
+.input,.select{height:28px;border:1px solid var(--border-base);border-radius:3px;padding:0 8px;font-size:13px;color:var(--text-base);background:#fff;outline:none}
+.input:focus,.select:focus{border-color:var(--primary)}
+
+/* ============ Segmented Tabs（分段切换） ============ */
+.seg-tabs{display:inline-flex;background:var(--bg-card);border:1px solid var(--border-soft);border-radius:4px;padding:3px;margin-bottom:10px;gap:2px}
+.seg-tabs .seg{padding:4px 18px;font-size:13px;color:var(--text-secondary);border-radius:3px;cursor:pointer;user-select:none;transition:all .15s;white-space:nowrap}
+.seg-tabs .seg:hover{color:var(--primary)}
+.seg-tabs .seg.active{background:var(--primary);color:#fff;font-weight:500}
+.seg-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 5px;margin-left:4px;border-radius:8px;background:var(--text-tertiary);color:#fff;font-size:11px;line-height:16px;font-weight:500}
+.seg-badge.warn{background:var(--warning)}
+
+/* ============ Confirm Body（确认弹窗内容） ============ */
+.confirm-body{display:flex;align-items:flex-start}
+.confirm-body .text{flex:1}
+.confirm-body .text .title{font-size:15px;font-weight:600;margin-bottom:6px}
+.confirm-body .text .desc{font-size:13px;color:var(--text-secondary);line-height:20px}
+.confirm-icon{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:16px;margin-right:8px;flex-shrink:0}
+.confirm-icon.warning{background:rgba(255,178,26,.1);color:var(--warning)}
+
+/* ============ Audit Modal（审批记录弹窗） ============ */
+.modal-audit{width:720px;max-height:80vh;display:flex;flex-direction:column}
+.modal-audit .modal-b{padding:0}
+.audit-table{width:100%;border-collapse:collapse;font-size:13px}
+.audit-table th{background:#f5f7fa;color:var(--text-base);font-weight:500;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border-soft);white-space:nowrap}
+.audit-table td{padding:10px 12px;border-bottom:1px solid var(--divider-thin);color:var(--text-base);vertical-align:top}
+.audit-table tbody tr:last-child td{border-bottom:none}
+.audit-table tbody tr:nth-child(even){background:#fafbfc}
+.audit-table .node{color:var(--text-secondary)}
+.audit-table .time{white-space:nowrap;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.audit-table .comment{color:var(--text-secondary);max-width:220px;word-break:break-all}
+.modal-audit .modal-f{justify-content:center}
+
+/* ============ Pill Tags（实心胶囊，用于审批操作） ============ */
+.tag-pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:500;line-height:18px}
+.tag-pill-success{background:var(--success);color:#fff}
+.tag-pill-error{background:var(--error);color:#fff}
+.tag-pill-warning{background:var(--warning);color:#fff}
+.tag-pill-info{background:var(--primary);color:#fff}
+.tag-pill-default{background:#e8ebed;color:var(--text-secondary)}
+
+/* ============ Weekday Unavailable Editor（按星期不可用时间） ============ */
+.unavail-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.unavail-empty{font-size:12px;color:var(--text-tertiary);padding:4px 0}
+.unavail-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border:1px solid var(--border-soft);border-radius:4px;background:var(--bg-page);font-size:13px}
+.unavail-add{border:1px dashed var(--border-soft);border-radius:4px;padding:10px;background:#fff}
+.week-chk{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.week-chk label{display:inline-flex;align-items:center;gap:3px;font-size:12px;padding:2px 8px;border:1px solid var(--border-soft);border-radius:12px;cursor:pointer;background:var(--bg-page)}
+.week-chk input{margin:0;cursor:pointer}
+.unavail-add .tf-row{margin-bottom:8px}
+
+/* ============ Workbench Banner（工作台横幅） ============ */
+.wb-banner{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;margin-bottom:14px;border-radius:6px;cursor:pointer;
+  background:linear-gradient(90deg,#eef2ff,#f7f9ff);border:1px solid #e2e8f7;transition:box-shadow .15s}
+.wb-banner.has-task{background:linear-gradient(90deg,#fff7e8,#fffdf7);border-color:#ffe2b8}
+.wb-banner:hover{box-shadow:0 2px 10px rgba(75,116,240,.12)}
+.wb-banner-l{display:flex;align-items:center;gap:14px}
+.wb-banner-num{font-size:30px;font-weight:700;color:var(--warning);line-height:1}
+.wb-banner-txt{font-size:13px;color:var(--text-secondary)}
+.wb-banner-btn{font-size:13px;color:var(--primary);font-weight:500}
+
+/* ============ Approval Detail（审批详情页 ad-*） ============ */
+.ad-detail{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 20px;padding:18px 20px}
+.ad-item{display:flex;flex-direction:column;gap:4px}
+.ad-item.full{grid-column:1 / -1}
+.ad-label{font-size:12px;color:var(--text-tertiary)}
+.ad-value{font-size:13px;color:var(--text-base);font-weight:500}
+.ad-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.ad-actions-card{background:#fff;border:1px solid var(--border-soft);border-radius:6px;padding:14px 16px;margin-top:14px}
+.ad-tabs{margin-top:4px}
+.ad-section{padding:16px 20px}
+.ad-section-title{font-size:14px;font-weight:600;color:var(--text-base);margin-bottom:12px}
+.ad-comment-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.ad-comment{padding:10px 12px;background:var(--bg-page);border-radius:4px;border:1px solid var(--border-soft)}
+.ad-comment-h{display:flex;justify-content:space-between;margin-bottom:4px}
+.ad-comment-user{font-size:13px;font-weight:600;color:var(--text-base)}
+.ad-comment-time{font-size:12px;color:var(--text-tertiary)}
+.ad-comment-body{font-size:13px;color:var(--text-secondary);line-height:1.5;word-break:break-all}
+.ad-comment-form{display:flex;gap:10px;align-items:flex-start}
+.ad-comment-form .input{flex:1;resize:vertical}
+.ad-timeline{margin:0 0 16px}
+.ad-tl-title{font-size:14px;font-weight:600;color:var(--text-base);margin-bottom:10px}
+.ad-tl-wrap{display:flex;flex-direction:column}
+.ad-tl-labels{display:flex;height:16px;margin-bottom:2px}
+.ad-tl-lbl{flex:1;text-align:center;font-size:9px;color:var(--text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ad-tl-track{display:flex;height:28px;border-radius:3px;overflow:hidden;border:1px solid var(--border-soft)}
+.ad-tl-cell{flex:1;border-right:1px solid var(--border-soft);background:#d6e4ff}
+.ad-tl-cell:last-child{border-right:none}
+.ad-tl-cell.occupied{background:#d7d9dd}
+.ad-tl-cell.current{background:#4B74F0}
+.ad-tl-legend{display:flex;gap:16px;margin-top:8px;font-size:12px;color:var(--text-tertiary)}
+.ad-tl-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.ad-tl-dot.free{background:#d6e4ff;border:1px solid var(--border-soft)}
+.ad-tl-dot.occupied{background:#d7d9dd}
+.ad-tl-dot.current{background:#4B74F0;border:1px solid var(--primary)}
+
+/* ============ 24h Room Timeline（会议室 24h 占用条） ============ */
+.room-timeline{display:flex;flex-direction:column;gap:4px}
+.timeline-labels{display:flex;height:22px;align-items:center}
+.timeline-hour{flex:1;text-align:center;font-size:11px;color:var(--text-tertiary);border-right:1px solid var(--border-soft);line-height:20px;min-width:26px}
+.timeline-hour:last-child{border-right:none}
+.timeline-bars{display:flex;height:34px;border-radius:3px;overflow:hidden;border:1px solid var(--border-soft)}
+.timeline-cell{flex:1;min-width:26px;border-right:1px solid #fff;position:relative;background:#d6e4ff;cursor:pointer;transition:background .12s}
+.timeline-cell:last-child{border-right:none}
+.timeline-cell.occupied{background:#c9ced6;cursor:not-allowed}
+.timeline-cell.selected{background:#ffd54f}
+.timeline-cell:hover{background:#ffd54f}
+.timeline-cell.occupied:hover{background:#c9ced6}
+.timeline-cell:hover::after{content:attr(data-hour);position:absolute;left:50%;top:-22px;transform:translateX(-50%);
+  background:rgba(0,0,0,.75);color:#fff;font-size:10px;padding:2px 6px;border-radius:3px;white-space:nowrap;z-index:10}
+.timeline-legend{display:flex;gap:16px;align-items:center;font-size:12px;color:var(--text-secondary);margin-top:6px}
+.timeline-legend .lg{display:flex;align-items:center;gap:5px}
+.timeline-legend .sw{width:14px;height:10px;border-radius:2px;display:inline-block}
+.timeline-legend .sw.blue{background:#d6e4ff}
+.timeline-legend .sw.gray{background:#c9ced6}
+.timeline-legend .sw.yellow{background:#ffd54f}
+</style>
+</head>
+<body>
+<!-- ============ Header ============ -->
+<header class="header">
+  <div class="logo"><span class="logo-icon">系</span>系统名称</div>
+  <div class="header-right">
+    <button class="manual-btn">📖 使用手册</button>
+    <button class="icon-btn" title="通知"><span>🔔</span><span class="badge" style="display:none">0</span></button>
+    <div class="user-info">
+      <div class="user-avatar">👤</div>
+      <div class="user-meta"><span class="user-name">用户名</span><span class="user-role">角色</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ Tab Bar ============ -->
+<div class="tab-bar" id="tabBar"></div>
+
+<!-- ============ Sidebar ============ -->
+<aside class="sidebar" id="navMenu"></aside>
+
+<!-- ============ Main ============ -->
+<main class="main" id="main">
+  <!-- 分段切换（如：我的发起 / 我参与的） -->
+  <div class="seg-tabs">
+    <span class="seg active">我的发起</span>
+    <span class="seg">我参与的</span>
+  </div>
+
+  <!-- 查询区 -->
+  <div class="filter-card">
+    <div class="filter-item"><label>条件一</label><input class="input" placeholder="请输入"></div>
+    <div class="filter-item"><label>条件二</label><select class="select"><option>全部</option></select></div>
+    <div class="filter-actions">
+      <button class="btn btn-primary btn-sm">查询</button>
+      <button class="btn btn-plain btn-sm">重置</button>
+    </div>
+  </div>
+
+  <!-- 表格 -->
+  <div class="table-toolbar"><div class="left">共 <b>10</b> 条</div>
+    <div class="right"><button class="btn btn-primary btn-sm">+ 新增</button></div></div>
+  <table class="dt">
+    <thead><tr>
+      <th>列一</th><th>列二</th><th class="center">操作</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>内容</td><td><span class="tag tag-success">同意</span></td>
+        <td class="center"><button class="btn-link">编辑</button><button class="btn-link">详情</button><button class="btn-link">审批记录</button></td></tr>
+      <tr><td colspan="3" class="empty">暂无数据</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 分页 -->
+  <div class="pager">
+    <div class="page-size"><select><option>10 条/页</option></select></div>
+    <div class="pages"><button class="page active">1</button><button class="page">2</button></div>
+  </div>
+</main>
+
+<!-- ============ 审批记录弹窗示例（按需复制，JS 动态插入 body） ============ -->
+<!--
+<div class="modal-mask" onclick="if(event.target===this)closeModal()">
+  <div class="modal modal-audit">
+    <div class="modal-h"><span>审批记录</span><span class="close" onclick="closeModal()">✕</span></div>
+    <div class="modal-b">
+      <table class="audit-table">
+        <thead><tr><th>流程节点</th><th>处理人</th><th>处理时间</th><th>审批操作</th><th>审批意见</th></tr></thead>
+        <tbody>
+          <tr><td class="node">开始</td><td>张明</td><td class="time">2026-08-11 09:12:03</td><td><span class="tag-pill tag-pill-info">启动</span></td><td class="comment">-</td></tr>
+          <tr><td class="node">审批人审批</td><td>李芳</td><td class="time">2026-08-11 10:05:21</td><td><span class="tag-pill tag-pill-success">通过</span></td><td class="comment">同意，按计划执行</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-f"><button class="btn btn-primary" onclick="closeModal()">关闭</button></div>
+  </div>
+</div>
+-->
+
+<!-- ============ 工作台横幅示例（按需复制） ============
+<div class="wb-banner has-task" onclick="go('approval')">
+  <div class="wb-banner-l">
+    <div class="wb-banner-num">3</div>
+    <div class="wb-banner-txt">条预约待你审批，请及时处理</div>
+  </div>
+  <div class="wb-banner-btn">前往审批中心 →</div>
+</div>
+-->
+
+<!-- ============ 审批中心列表示例（分段 + 表格行内操作） ============
+<div class="seg-tabs">
+  <div class="seg active">待审批 <span class="seg-badge warn">3</span></div>
+  <div class="seg">已同意 <span class="seg-badge">12</span></div>
+  <div class="seg">已拒绝 <span class="seg-badge">2</span></div>
+  <div class="seg">全部 <span class="seg-badge">20</span></div>
+</div>
+<div class="card">
+  <table class="dt">
+    <thead><tr><th>会议主题</th><th>申请人</th><th>会议室</th><th class="center">状态</th><th class="center">操作</th></tr></thead>
+    <tbody>
+      <tr><td>季度规划会</td><td>张明</td><td>第一会议室</td><td class="center"><span class="tag tag-warning">待审批</span></td>
+        <td class="center">
+          <button class="btn btn-sm btn-success">通过</button>
+          <button class="btn btn-sm btn-primary">详情</button>
+          <button class="btn btn-sm btn-danger">拒绝</button>
+        </td></tr>
+      <tr><td>周例会</td><td>李芳</td><td>第二会议室</td><td class="center"><span class="tag tag-success">同意</span></td>
+        <td class="center">
+          <button class="btn btn-sm btn-primary">详情</button>
+          <button class="btn btn-sm btn-primary">审批记录</button>
+        </td></tr>
+    </tbody>
+  </table>
+</div>
+-->
+
+<!-- ============ 审批详情页示例（详情网格 + 24h 占用条 + 操作卡片 + 分段） ============
+<div class="card ad-detail">
+  <div class="ad-item"><span class="ad-label">会议主题</span><span class="ad-value">季度规划会</span></div>
+  <div class="ad-item"><span class="ad-label">申请人</span><span class="ad-value">张明</span></div>
+  <div class="ad-item"><span class="ad-label">会议室</span><span class="ad-value">第一会议室</span></div>
+  <div class="ad-item"><span class="ad-label">当前状态</span><span class="ad-value"><span class="tag tag-warning">待审批</span></span></div>
+  <div class="ad-item full"><span class="ad-label">申请事由 / 备注</span><span class="ad-value">讨论下季度目标与排期</span></div>
+</div>
+<div class="ad-timeline">
+  <div class="ad-tl-title">2026-08-12 第一会议室 时间占用</div>
+  <div class="ad-tl-wrap">
+    <div class="ad-tl-labels">
+      <div class="ad-tl-lbl">00:00</div><div class="ad-tl-lbl">06:00</div><div class="ad-tl-lbl">12:00</div><div class="ad-tl-lbl">18:00</div><div class="ad-tl-lbl">23:00</div>
+    </div>
+    <div class="ad-tl-track">
+      <div class="ad-tl-cell"></div><div class="ad-tl-cell occupied"></div><div class="ad-tl-cell current"></div>
+      <div class="ad-tl-cell"></div><div class="ad-tl-cell occupied"></div><div class="ad-tl-cell"></div>
+    </div>
+  </div>
+  <div class="ad-tl-legend">
+    <span><span class="ad-tl-dot free"></span>空闲</span>
+    <span><span class="ad-tl-dot occupied"></span>已占用</span>
+    <span><span class="ad-tl-dot current"></span>当前会议</span>
+  </div>
+</div>
+<div class="card ad-actions-card">
+  <div class="ad-actions">
+    <button class="btn btn-success">同意</button>
+    <button class="btn btn-primary">批注</button>
+    <button class="btn btn-primary">退回</button>
+    <button class="btn btn-primary">评论</button>
+    <button class="btn btn-danger">拒绝</button>
+    <button class="btn btn-plain">返回</button>
+  </div>
+</div>
+<div class="seg-tabs ad-tabs">
+  <div class="seg active">审批记录</div>
+  <div class="seg">评论</div>
+</div>
+<div class="card ad-section">
+  <div class="ad-section-title">评论</div>
+  <div class="ad-comment-list">
+    <div class="ad-comment"><div class="ad-comment-h"><span class="ad-comment-user">张明</span><span class="ad-comment-time">2026-08-12 09:10</span></div><div class="ad-comment-body">会议室已确认，谢谢。</div></div>
+  </div>
+  <div class="ad-comment-form"><textarea class="input" rows="2" placeholder="输入评论内容"></textarea><button class="btn btn-primary btn-sm">发表评论</button></div>
+</div>
+-->
+
+<!-- ============ 24h 会议室占用条示例（会议室占用页 / 预订选时段） ============
+<div class="room-timeline">
+  <div class="timeline-labels">
+    <div class="timeline-hour">00:00</div><div class="timeline-hour">06:00</div><div class="timeline-hour">12:00</div><div class="timeline-hour">18:00</div><div class="timeline-hour">23:00</div>
+  </div>
+  <div class="timeline-bars">
+    <div class="timeline-cell" data-hour="09:00-10:00"></div>
+    <div class="timeline-cell occupied" data-hour="10:00-11:00"></div>
+    <div class="timeline-cell selected" data-hour="14:00-15:00"></div>
+    <div class="timeline-cell" data-hour="15:00-16:00"></div>
+  </div>
+  <div class="timeline-legend">
+    <span class="lg"><span class="sw blue"></span>可预约</span>
+    <span class="lg"><span class="sw gray"></span>已被预约</span>
+    <span class="lg"><span class="sw yellow"></span>已选</span>
+  </div>
+</div>
+-->
+
+<script>
+/* 最小交互示例：侧边菜单高亮 + 标签关闭（按需扩展） */
+document.querySelectorAll('.menu-item').forEach(function(m){
+  m.addEventListener('click',function(){document.querySelectorAll('.menu-item').forEach(function(x){x.classList.remove('active')});m.classList.add('active')});
+});
+</script>
+</body>
+</html>
