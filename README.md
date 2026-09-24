@@ -25,6 +25,8 @@
 - **红灯清单**：把挤牙膏式提问、不读文件就执行、替用户决策等反模式写成绝对禁止项并配对照示例——用负例约束比只写正例稳定得多；
 - **可验证迭代**：`test-prompts.json` 保存回归测试用例；`q-before-a-result.png` 是用 skill 优化器（Darwin.skill，SkillLens 九维评分）跑出的 5 轮进化报告（81.0 → 87.2），D9 反例黑名单维度 5→8 是最大突破——迭代过程可复现、指标可追溯。
 
+**评分方法学（81→87.2 是什么）**：Darwin.skill 是一个"评 skill 的 meta-skill"，按 SkillLens 论文（arXiv 2605.23899）的九维 rubric 给 SKILL.md 打分（元数据/工作流/失败模式/检查点/可执行性/资源整合/架构/实测表现/反例黑名单，满分 100）；每轮取最弱维度定向改进后重评，`q-before-a-result.png` 即 5 轮迭代的完整报告截图，`test-prompts.json` 为配套的回归用例。**分数来自结构化 rubric 而非主观自评，维度分和样例均可在图中核对。**
+
 ## 如何使用
 
 把 skill 目录复制到 Claude Code 的 `~/.claude/skills/`（或 ZCode 对应目录）即可被自动发现；触发方式见各 `SKILL.md` frontmatter 的 `description` 字段。
