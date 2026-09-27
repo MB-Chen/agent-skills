@@ -8,6 +8,7 @@
 |-------|-----------|
 | [`q-before-a`](./q-before-a/SKILL.md) | "先澄清，后执行"工作模式：检测到触发词后强制进入只读+提问态，完整读取全部上下文、逐条拆解需求、一次性输出编号澄清清单，用户确认前禁止任何写操作 |
 | [`web-ui-design-system`](./web-ui-design-system/SKILL.md) | 中文企业级后台 UI 设计系统：把管理后台的既有界面规范（颜色/圆角/表格/状态标签/审批组件）系统提取为 design tokens + 组件 CSS 类名 + 单文件 HTML 模板，让 AI 生成原型时直接对齐平台风格，多页面多项目不再各画各的 |
+| [`codewave-brain`](./codewave-brain/SKILL.md) | 网易 CodeWave 低代码平台"大脑"：官方文档中心 v4.5 Markdown 版全量本地化（930 篇）+ 自写检索脚本，回答平台问题先检索后作答，按业务/概念/组件/接口/运维五种模式路由 |
 
 ## web-ui-design-system 的设计要点
 
@@ -27,6 +28,13 @@
 
 **评分方法学（81→87.2 是什么）**：Darwin.skill 是一个"评 skill 的 meta-skill"，按 SkillLens 论文（arXiv 2605.23899）的九维 rubric 给 SKILL.md 打分（元数据/工作流/失败模式/检查点/可执行性/资源整合/架构/实测表现/反例黑名单，满分 100）；每轮取最弱维度定向改进后重评，`q-before-a-result.png` 即 5 轮迭代的完整报告截图，`test-prompts.json` 为配套的回归用例。**分数来自结构化 rubric 而非主观自评，维度分和样例均可在图中核对。**
 
+## codewave-brain 的设计要点
+
+- **问题来源**：实习期回答 CodeWave 平台问题全凭模型记忆——文档版本一旧就开始幻觉，组件属性、流程配置这类细节答不准。解法是把官方文档中心 v4.5 的 Markdown 版（930 篇，约 11.9MB）完整落到本地，回答平台问题一律"先检索、后作答"，不凭印象开口。
+- **检索流程写进 SKILL.md 当硬规矩**：先用 `scripts/search_codewave_docs.py` 拿用户原问题当 query 检索，再按命中路径读取原文；并要求把"文档明确说的"与"基于架构的推断"分开标注，文档没依据时明说"未检索到直接说明"——不让检索环节被跳过。
+- **五种检索模式**：business（业务怎么实现）/ concept（概念理论）/ component（组件与页面属性）/ integration（接口与扩展）/ ops（发布权限运维），问题类型明确时加模式参数提高命中率；配套 `references/catalog.jsonl`（925 条文档索引）、`references/doc_map.md` 目录地图。
+- **版权边界**：官方文档本体（`references/docs/`）与截图链接清单仅保留在本地使用，本仓库只提交 Skill 定义、索引与检索脚本——检索架构可复现，版权内容不转载。
+
 ## 如何使用
 
-把 skill 目录复制到 Claude Code 的 `~/.claude/skills/`（或 ZCode 对应目录）即可被自动发现；触发方式见各 `SKILL.md` frontmatter 的 `description` 字段。
+把 skill 目录复制到 Claude Code 的 `~/.claude/skills/`（或 ZCode 对应目录）即可被自动发现；触发方式见各 `SKILL.md` frontmatter 的 `description` 字段。codewave-brain 的完整能力需配合本地化的官方文档本体使用（见上文版权边界说明）。

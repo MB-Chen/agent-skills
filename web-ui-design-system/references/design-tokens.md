@@ -1,6 +1,6 @@
-# 设计系统参考（企业级管理后台风格）
+# 设计系统参考（会议预约系统风格）
 
-本文件提取自企业级管理后台原型的完整设计令牌（Design Tokens）与组件样式。
+本文件是从「会议预约系统」原型中提取的完整设计令牌（Design Tokens）与组件样式。
 生成任何 Web 端产品页面（后台管理、企业系统、数据看板、表单页）时，**直接复用**以下 CSS 变量与类名，
 保持一致的视觉语言：主色蓝 `#4B74F0`、浅灰页面底 `#F4F8FF`、白色卡片、圆角 6px、表格灰底表头、状态标签色系。
 
@@ -84,6 +84,38 @@ ul{list-style:none}
 .tab-close:hover{background:var(--error);color:#fff}
 .main{margin-left:var(--side-w);margin-top:calc(var(--top-h) + 36px);padding:16px}
 ```
+
+---
+
+## 2.1 面包屑（标签页风格 / breadcrumb-tab）
+
+位于主内容区（main）顶部、贴左/右/上边的浅蓝底栏。左侧为「首页」（带 🏠 图标，可点击回到首页或首个菜单），右侧为当前页标签（白色背景、带边框、圆角上沿），末尾带 × 关闭按钮（点击同样回到首页）。与顶栏下的 `.tab-bar`（多标签栏）不同：面包屑固定只显示「首页 + 当前页」两枚，用于无多开标签场景的轻量导航。
+
+```css
+/* 面包屑（标签页风格）— 置于 main 顶部；margin 负值需与 main 的 padding 对齐（此处理信于 template 的 main padding:16px） */
+.breadcrumb{display:flex;align-items:flex-end;gap:8px;background:#f4f8ff;border-bottom:1px solid #d6e4ff;padding:10px 20px 0;margin:-16px -16px 16px -16px;font-size:13px}
+.breadcrumb-home{color:var(--primary);display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:7px 10px;margin-bottom:1px;border-radius:4px 4px 0 0}
+.breadcrumb-home:hover{background:#e6efff}
+.breadcrumb-tab{background:#fff;border:1px solid #d6e4ff;border-bottom:1px solid #fff;border-radius:4px 4px 0 0;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;color:var(--text-base);position:relative;top:1px}
+.breadcrumb-tab .close{color:var(--text-tertiary);cursor:pointer;font-size:14px;line-height:1;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;border-radius:2px}
+.breadcrumb-tab .close:hover{color:var(--text-base);background:#f0f0f0}
+```
+
+用法：
+
+```html
+<div class="breadcrumb">
+  <span class="breadcrumb-home" onclick="switchMenu(firstMenuId)" title="首页"><span>🏠</span>首页</span>
+  <span class="breadcrumb-tab">
+    <span>当前页面标题</span>
+    <span class="close" onclick="switchMenu(firstMenuId)" title="关闭">×</span>
+  </span>
+</div>
+```
+
+- 颜色语义：底栏 `#f4f8ff`（浅蓝）/ 边框 `#d6e4ff`（可预约蓝），与全站 Token 一致；首页与当前页标签文字分别用 `--primary` 与 `--text-base`。
+- 当前页标签的 `border-bottom:1px solid #fff` 用于"盖住"底栏下边框，形成选中上沿咬合效果；`top:1px` 微调对齐。
+- 与 `.tab-bar`（section 2 顶栏下多标签栏）并存不冲突：面包屑在 main 内、只显示当前上下文。
 
 ---
 
@@ -237,7 +269,7 @@ textarea.input{height:auto;padding:6px 8px;resize:vertical;line-height:20px}
 ```
 状态映射约定：`同意(已通过)/可用 → tag-success`，`待审批/维护中 → tag-warning`，`已拒绝/已取消 → tag-error`，`草稿/保存 → tag-default`，`重要信息 → tag-info`。
 
-> 文案约定（与企业后台原型一致）：审批通过的状态标签统一写作 **"同意"**（内部值仍为 `approved`）；拒绝写作"已拒绝"；待审批写作"待审批"；撤回中写作"撤回"。审批操作胶囊（`tag-pill`）同理：通过→`tag-pill-success` 显示"通过"，拒绝→`tag-pill-error` 显示"拒绝"。
+> 文案约定（与会议预约系统一致）：审批通过的状态标签统一写作 **"同意"**（内部值仍为 `approved`）；拒绝写作"已拒绝"；待审批写作"待审批"；撤回中写作"撤回"。审批操作胶囊（`tag-pill`）同理：通过→`tag-pill-success` 显示"通过"，拒绝→`tag-pill-error` 显示"拒绝"。
 
 ---
 

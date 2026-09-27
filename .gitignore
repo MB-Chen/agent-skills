@@ -1,0 +1,8 @@
+# 本地离线分发包：含第三方 Skill 与完整文档压缩包，不入公开仓库
+dist/
+*.zip
+*.skill
+
+# CodeWave 官方文档本体与截图链接清单：版权原因仅保留本地
+codewave-brain/references/docs/
+codewave-brain/references/image_links.jsonl

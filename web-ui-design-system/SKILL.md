@@ -1,6 +1,6 @@
 ---
 name: web-ui-design-system
-description: 中文企业级 Web 产品界面设计系统（源自企业级管理后台原型）。当用户要求生成后台管理、数据看板、表单页、列表页等 Web 端 HTML 原型或页面时，应使用本技能，以确保视觉风格一致：主色蓝 #4B74F0、浅灰页面底、白色卡片、6px 圆角、灰底表头表格、状态标签色系、固定顶栏 + 左侧菜单 + 标签栏布局。This skill should be used when the user asks to build or prototype any web page (admin dashboard, management console, data table, form page, HTML mockup) and wants it to follow this established Chinese enterprise UI style.
+description: 中文企业级 Web 产品界面设计系统（源自「会议预约系统」原型）。当用户要求生成后台管理、数据看板、表单页、列表页等 Web 端 HTML 原型或页面时，应使用本技能，以确保视觉风格一致：主色蓝 #4B74F0、浅灰页面底、白色卡片、6px 圆角、灰底表头表格、状态标签色系、固定顶栏 + 左侧菜单 + 标签栏布局。This skill should be used when the user asks to build or prototype any web page (admin dashboard, management console, data table, form page, HTML mockup) and wants it to follow this established Chinese enterprise UI style.
 agent_created: true
 ---
 
@@ -8,7 +8,7 @@ agent_created: true
 
 ## 用途
 
-本技能封装了一套完整的中文企业后台 / 管理系统视觉规范，提取自企业级管理后台单文件 HTML 原型。
+本技能封装了一套完整的中文企业后台 / 管理系统视觉规范，提取自「会议预约系统」单文件 HTML 原型。
 用于在生成任何 Web 端页面时，复用同一套设计令牌（颜色、间距、圆角、字体）与组件类名（顶栏、侧边菜单、卡片、查询区、表格、分页、标签、弹窗、表单网格），保证多页面、多项目之间风格统一。
 
 ## 何时使用

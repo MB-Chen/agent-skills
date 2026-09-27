@@ -68,6 +68,14 @@ ul{list-style:none}
 
 /* ============ Main ============ */
 .main{margin-left:var(--side-w);margin-top:calc(var(--top-h) + 36px);padding:16px}
+
+/* 面包屑（标签页风格）— 置于 main 顶部；margin 负值需与 main 的 padding 对齐 */
+.breadcrumb{display:flex;align-items:flex-end;gap:8px;background:#f4f8ff;border-bottom:1px solid #d6e4ff;padding:10px 20px 0;margin:-16px -16px 16px -16px;font-size:13px}
+.breadcrumb-home{color:var(--primary);display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:7px 10px;margin-bottom:1px;border-radius:4px 4px 0 0}
+.breadcrumb-home:hover{background:#e6efff}
+.breadcrumb-tab{background:#fff;border:1px solid #d6e4ff;border-bottom:1px solid #fff;border-radius:4px 4px 0 0;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;color:var(--text-base);position:relative;top:1px}
+.breadcrumb-tab .close{color:var(--text-tertiary);cursor:pointer;font-size:14px;line-height:1;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;border-radius:2px}
+.breadcrumb-tab .close:hover{color:var(--text-base);background:#f0f0f0}
 .page-title{font-size:18px;font-weight:600;line-height:28px;margin-bottom:12px;color:var(--text-base)}
 .page-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .page-toolbar .left{font-size:18px;font-weight:600}
@@ -266,6 +274,12 @@ ul{list-style:none}
 
 <!-- ============ Main ============ -->
 <main class="main" id="main">
+  <!-- 面包屑（标签页风格）：首页 + 当前页标签（带关闭×）。取消注释即可使用 -->
+  <!-- <div class="breadcrumb">
+    <span class="breadcrumb-home" onclick="switchMenu(firstMenuId)" title="首页"><span>🏠</span>首页</span>
+    <span class="breadcrumb-tab"><span>当前页面标题</span><span class="close" onclick="switchMenu(firstMenuId)" title="关闭">×</span></span>
+  </div> -->
+
   <!-- 分段切换（如：我的发起 / 我参与的） -->
   <div class="seg-tabs">
     <span class="seg active">我的发起</span>
